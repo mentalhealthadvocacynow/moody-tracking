@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Textarea } from '@/components/ui/textarea';
@@ -9,6 +9,12 @@ import { Smile, Frown, Clock, Home } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useActivityTracking } from '@/hooks/useActivityTracking';
 
+type ActivityDraft = {
+  beforeMood: number;
+  afterMood: number;
+  activityNotes: string;
+};
+
 export default function ActivityTrackingPage() {
   const navigate = useNavigate();
   const [beforeMood, setBeforeMood] = useState(5);
@@ -16,12 +22,39 @@ export default function ActivityTrackingPage() {
   const [activityNotes, setActivityNotes] = useState('');
   const { activities, addActivity, weeklyActivities, monthlyActivities, yearlyActivities } = useActivityTracking();
 
+  // Load draft from localStorage on mount
+  useEffect(() => {
+    try {
+      const savedDraft = localStorage.getItem('activityTrackingDraft');
+      if (savedDraft) {
+        const draft: ActivityDraft = JSON.parse(savedDraft);
+        setBeforeMood(draft.beforeMood);
+        setAfterMood(draft.afterMood);
+        setActivityNotes(draft.activityNotes);
+      }
+    } catch (error) {
+      console.error('Failed to load draft', error);
+    }
+  }, []);
+
+  // Save draft to localStorage whenever state changes
+  useEffect(() => {
+    const draft: ActivityDraft = {
+      beforeMood,
+      afterMood,
+      activityNotes
+    };
+    localStorage.setItem('activityTrackingDraft', JSON.stringify(draft));
+  }, [beforeMood, afterMood, activityNotes]);
+
   const handleCompleteActivity = () => {
     addActivity({
       beforeMood,
       afterMood,
       notes: activityNotes
     });
+    // Clear draft after saving
+    localStorage.removeItem('activityTrackingDraft');
     setActivityNotes('');
     navigate('/'); // Navigate back to home after completing activity
   };
