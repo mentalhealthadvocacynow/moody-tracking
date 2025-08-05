@@ -7,7 +7,6 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { BookOpen, Home } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { showSuccess, showError } from '@/utils/toast';
-import JournalPromptGenerator from '@/components/JournalPromptGenerator';
 
 const prompts = [
   "What are three things you're grateful for today?",
@@ -39,20 +38,28 @@ export default function GratitudeJournalPage() {
     }
 
     try {
-      const entries = JSON.parse(localStorage.getItem('journalEntries') || '[]');
+      // Get existing entries or initialize empty array
+      const existingEntries = JSON.parse(localStorage.getItem('gratitudeJournalEntries') || '[]');
+      
       const newEntry = {
         id: Date.now(),
         date: new Date().toISOString(),
         prompt: currentPrompt,
         content: journalEntry
       };
-      localStorage.setItem('journalEntries', JSON.stringify([...entries, newEntry]));
-      showSuccess('Journal entry saved!');
+
+      // Save the updated array
+      localStorage.setItem(
+        'gratitudeJournalEntries', 
+        JSON.stringify([...existingEntries, newEntry])
+      );
+      
+      showSuccess('Journal entry saved successfully!');
       setJournalEntry('');
       getRandomPrompt();
     } catch (error) {
       showError('Failed to save journal entry');
-      console.error(error);
+      console.error('Error saving entry:', error);
     }
   };
 
