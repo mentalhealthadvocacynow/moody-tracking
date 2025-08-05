@@ -21,7 +21,7 @@ const ActivityTrackingPage = () => {
   const [beforeMood, setBeforeMood] = useState(5);
   const [afterMood, setAfterMood] = useState(5);
   const [activityNotes, setActivityNotes] = useState('');
-  const { addActivity, weeklyActivities, monthlyActivities } = useActivityTracking();
+  const { activities, addActivity, weeklyActivities } = useActivityTracking();
 
   // Load draft from localStorage on mount
   useEffect(() => {
@@ -132,34 +132,42 @@ const ActivityTrackingPage = () => {
         Complete Activity
       </Button>
 
-      {/* Activity history sections */}
-      {weeklyActivities.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Activities</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {weeklyActivities.map((activity) => (
-              <div key={activity.id} className="border rounded-lg p-4">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <p className="font-medium">
-                      {activity.date.toLocaleDateString()} at {activity.date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      Mood change: {activity.beforeMood} → {activity.afterMood}
-                    </p>
+      {/* Activity history section */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Your Recent Activities</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {activities.length > 0 ? (
+            activities
+              .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+              .map((activity) => (
+                <div key={activity.id} className="border rounded-lg p-4">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p className="font-medium">
+                        {new Date(activity.date).toLocaleDateString()} at{' '}
+                        {new Date(activity.date).toLocaleTimeString([], {
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        Mood change: {activity.beforeMood} → {activity.afterMood}
+                      </p>
+                    </div>
+                    <Clock className="text-muted-foreground" />
                   </div>
-                  <Clock className="text-muted-foreground" />
+                  {activity.notes && (
+                    <p className="mt-2 text-sm">{activity.notes}</p>
+                  )}
                 </div>
-                {activity.notes && (
-                  <p className="mt-2 text-sm">{activity.notes}</p>
-                )}
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      )}
+              ))
+          ) : (
+            <p className="text-muted-foreground">No activities recorded yet</p>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 };

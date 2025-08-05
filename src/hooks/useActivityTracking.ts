@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import { showSuccess, showError } from '@/utils/toast';
 
 export const useActivityTracking = () => {
   const [activities, setActivities] = useState<Array<{
@@ -31,9 +32,7 @@ export const useActivityTracking = () => {
 
   // Save to localStorage
   useEffect(() => {
-    if (activities.length > 0) {
-      localStorage.setItem('mentalHealthActivities', JSON.stringify(activities));
-    }
+    localStorage.setItem('mentalHealthActivities', JSON.stringify(activities));
   }, [activities]);
 
   const addActivity = (activity: {
@@ -47,6 +46,7 @@ export const useActivityTracking = () => {
       ...activity
     };
     setActivities(prev => [...prev, newActivity]);
+    showSuccess('Activity saved successfully!');
   };
 
   return {
@@ -55,17 +55,7 @@ export const useActivityTracking = () => {
     weeklyActivities: activities.filter(a => {
       const oneWeekAgo = new Date();
       oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-      return a.date > oneWeekAgo;
-    }),
-    monthlyActivities: activities.filter(a => {
-      const oneMonthAgo = new Date();
-      oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
-      return a.date > oneMonthAgo;
-    }),
-    yearlyActivities: activities.filter(a => {
-      const oneYearAgo = new Date();
-      oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
-      return a.date > oneYearAgo;
+      return new Date(a.date) > oneWeekAgo;
     })
   };
 };
