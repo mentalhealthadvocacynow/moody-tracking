@@ -2,7 +2,7 @@
 
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Plus, Heart, Moon, BookOpen, Activity } from 'lucide-react';
+import { Plus, Heart, Moon, BookOpen, Activity, CalendarDays } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const activities = [
@@ -33,6 +33,13 @@ const activities = [
     description: "Practice being kind to yourself",
     duration: "5 min",
     icon: <Heart className="w-6 h-6" />
+  },
+  {
+    id: 5,
+    title: "Mood Journal",
+    description: "Track your daily moods and identify patterns",
+    duration: "5 min",
+    icon: <CalendarDays className="w-6 h-6" />
   }
 ];
 
@@ -44,7 +51,7 @@ export default function ActivitiesPage() {
       <h1 className="text-3xl font-bold">Mental Health Activities</h1>
       <p className="text-muted-foreground">Choose an activity to improve your wellbeing</p>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {activities.map((activity) => (
           <Card key={activity.id} className="hover:shadow-md transition-shadow">
             <CardHeader className="flex flex-row items-center space-x-4">
@@ -62,7 +69,7 @@ export default function ActivitiesPage() {
             <CardFooter>
               <Button 
                 className="w-full"
-                onClick={() => navigate('/track-activity')}
+                onClick={() => activity.id === 5 ? navigate('/mood-journal') : navigate('/track-activity')}
               >
                 Try This Activity
               </Button>

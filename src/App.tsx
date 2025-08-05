@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ActivitiesPage from "./pages/ActivitiesPage";
 import MoodCheckPage from "./pages/MoodCheckPage";
 import ActivityTrackingPage from "./pages/ActivityTrackingPage";
+import MoodJournalPage from "./pages/MoodJournalPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -21,6 +22,7 @@ function App() {
             <Route path="/" element={<ActivitiesPage />} />
             <Route path="/mood-check" element={<MoodCheckPage />} />
             <Route path="/track-activity" element={<ActivityTrackingPage />} />
+            <Route path="/mood-journal" element={<MoodJournalPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
