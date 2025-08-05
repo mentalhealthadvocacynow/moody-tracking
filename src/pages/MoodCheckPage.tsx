@@ -10,7 +10,24 @@ import { useNavigate } from 'react-router-dom';
 
 export default function MoodCheckPage() {
   const navigate = useNavigate();
-  // ... (rest of your existing state and functions)
+  const [moodRating, setMoodRating] = useState(5);
+  const [inControl, setInControl] = useState<string[]>([]);
+  const [outOfControl, setOutOfControl] = useState<string[]>([]);
+  const [currentThought, setCurrentThought] = useState('');
+
+  const handleAddInControl = () => {
+    if (currentThought.trim()) {
+      setInControl([...inControl, currentThought]);
+      setCurrentThought('');
+    }
+  };
+
+  const handleAddOutOfControl = () => {
+    if (currentThought.trim()) {
+      setOutOfControl([...outOfControl, currentThought]);
+      setCurrentThought('');
+    }
+  };
 
   return (
     <div className="container mx-auto p-4 space-y-6">
@@ -21,7 +38,7 @@ export default function MoodCheckPage() {
         </Button>
       </div>
       
-      {/* ... (rest of your existing mood check UI) ... */}
+      {/* Rest of your mood check UI */}
     </div>
   );
 }
