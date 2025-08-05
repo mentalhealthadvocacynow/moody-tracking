@@ -3,14 +3,16 @@
 import { useState, useEffect } from 'react';
 import { showSuccess, showError } from '@/utils/toast';
 
+type Activity = {
+  id: number;
+  beforeMood: number;
+  afterMood: number;
+  notes: string;
+  date: string; // Changed to string for proper serialization
+};
+
 export const useActivityTracking = () => {
-  const [activities, setActivities] = useState<Array<{
-    id: number;
-    beforeMood: number;
-    afterMood: number;
-    notes: string;
-    date: Date;
-  }>>([]);
+  const [activities, setActivities] = useState<Activity[]>([]);
 
   // Load from localStorage
   useEffect(() => {
@@ -18,14 +20,11 @@ export const useActivityTracking = () => {
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        // Convert string dates back to Date objects
-        const withDates = parsed.map((a: any) => ({
-          ...a,
-          date: new Date(a.date)
-        }));
-        setActivities(withDates);
+        setActivities(parsed);
       } catch (e) {
         console.error("Failed to parse saved activities", e);
+        // Clear corrupted data
+        localStorage.removeItem('mentalHealthActivities');
       }
     }
   }, []);
@@ -35,24 +34,25 @@ export const useActivityTracking = () => {
     localStorage.setItem('mentalHealthActivities', JSON.stringify(activities));
   }, [activities]);
 
-  const addActivity = (activity: {
-    beforeMood: number;
-    afterMood: number;
-    notes: string;
-  }) => {
-    const newActivity = {
+  const addActivity = (activity: Omit<Activity, 'id' | 'date'>) => {
+    const newActivity: Activity = {
       id: Date.now(),
-      date: new Date(),
+      date: new Date().toISOString(), // Store as ISO string
       ...activity
     };
     setActivities(prev => [...prev, newActivity]);
-    showSuccess('Activity saved successfully!');
+  };
+
+  const getActivities = () => {
+    return [...activities].sort((a, b) => 
+      new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
   };
 
   return {
-    activities,
+    activities: getActivities(),
     addActivity,
-    weeklyActivities: activities.filter(a => {
+    weeklyActivities: getActivities().filter(a => {
       const oneWeekAgo = new Date();
       oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
       return new Date(a.date) > oneWeekAgo;
