@@ -44,7 +44,7 @@ const activities = [
 ];
 
 export default function ActivitiesPage() {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Now properly imported
 
   return (
     <div className="container mx-auto p-4 space-y-6">
