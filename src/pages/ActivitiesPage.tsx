@@ -3,6 +3,7 @@
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Plus, Heart, Moon, BookOpen, Activity } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const activities = [
   {
@@ -36,6 +37,8 @@ const activities = [
 ];
 
 export default function ActivitiesPage() {
+  const navigate = useNavigate();
+
   return (
     <div className="container mx-auto p-4 space-y-6">
       <h1 className="text-3xl font-bold">Mental Health Activities</h1>
@@ -57,12 +60,25 @@ export default function ActivitiesPage() {
               <p>{activity.description}</p>
             </CardContent>
             <CardFooter>
-              <Button className="w-full">
+              <Button 
+                className="w-full"
+                onClick={() => navigate('/track-activity')}
+              >
                 Try This Activity
               </Button>
             </CardFooter>
           </Card>
         ))}
+      </div>
+
+      <div className="flex justify-center">
+        <Button 
+          variant="outline" 
+          onClick={() => navigate('/mood-check')}
+          className="mt-8"
+        >
+          How am I feeling right now?
+        </Button>
       </div>
     </div>
   );
