@@ -9,52 +9,52 @@ import JournalPromptGenerator from '@/components/JournalPromptGenerator';
 import MindfulnessWalk from '@/components/MindfulnessWalk';
 import SelfCompassionBreak from '@/components/SelfCompassionBreak';
 
-const activities = [
-  {
-    id: 1,
-    title: "5-5-5 Breathing",
-    description: "Calm your nervous system with this simple breathing exercise",
-    duration: "5 min",
-    icon: <Activity className="w-6 h-6" />,
-    component: <BreathingExercise />
-  },
-  {
-    id: 2,
-    title: "Journal Prompts",
-    description: "Reflective writing to process thoughts and feelings",
-    duration: "10 min",
-    icon: <BookOpen className="w-6 h-6" />,
-    component: <JournalPromptGenerator />
-  },
-  {
-    id: 3,
-    title: "Mindfulness Walk",
-    description: "Take a walk while focusing on your senses",
-    duration: "15 min",
-    icon: <Footprints className="w-6 h-6" />,
-    component: <MindfulnessWalk />
-  },
-  {
-    id: 4,
-    title: "Self-Compassion Break",
-    description: "Practice being kind to yourself",
-    duration: "5 min",
-    icon: <Heart className="w-6 h-6" />,
-    component: <SelfCompassionBreak />
-  },
-  {
-    id: 5,
-    title: "Mood Journal",
-    description: "Track your daily moods and identify patterns",
-    duration: "5 min",
-    icon: <CalendarDays className="w-6 h-6" />,
-    onClick: () => navigate('/mood-journal')
-  }
-];
-
 export default function ActivitiesPage() {
   const navigate = useNavigate();
   const [selectedActivity, setSelectedActivity] = useState<number | null>(null);
+
+  const activities = [
+    {
+      id: 1,
+      title: "5-5-5 Breathing",
+      description: "Calm your nervous system with this simple breathing exercise",
+      duration: "5 min",
+      icon: <Activity className="w-6 h-6" />,
+      component: <BreathingExercise />
+    },
+    {
+      id: 2,
+      title: "Journal Prompts",
+      description: "Reflective writing to process thoughts and feelings",
+      duration: "10 min",
+      icon: <BookOpen className="w-6 h-6" />,
+      component: <JournalPromptGenerator />
+    },
+    {
+      id: 3,
+      title: "Mindfulness Walk",
+      description: "Take a walk while focusing on your senses",
+      duration: "15 min",
+      icon: <Footprints className="w-6 h-6" />,
+      component: <MindfulnessWalk />
+    },
+    {
+      id: 4,
+      title: "Self-Compassion Break",
+      description: "Practice being kind to yourself",
+      duration: "5 min",
+      icon: <Heart className="w-6 h-6" />,
+      component: <SelfCompassionBreak />
+    },
+    {
+      id: 5,
+      title: "Mood Journal",
+      description: "Track your daily moods and identify patterns",
+      duration: "5 min",
+      icon: <CalendarDays className="w-6 h-6" />,
+      onClick: () => navigate('/mood-journal')
+    }
+  ];
 
   return (
     <div className="container mx-auto p-4 space-y-6">
